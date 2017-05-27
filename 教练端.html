@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="viewport" content="width=device-width,height=device-height, user-scalable=no,initial-scale=1, minimum-scale=1, maximum-scale=1,target-densitydpi=device-dpi ">  
+<link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" />
+<title>无标题文档</title>
+<style>
+    *{
+    	font-size: 13px;
+    }
+	.table > tbody > tr > td{
+		vertical-align: middle;
+	}
+	.table > tbody > tr > td:first-child{
+		text-align: center;
+	}
+	.table > tbody > tr:nth-of-type(2) > td{
+		text-align: center;
+	}
+	.table > tbody > tr:nth-of-type(3) > td{
+		text-align: center;
+	}
+	td img{
+		height: 20px;
+		width: 20px;
+	}
+	td input{
+        width: 60%;
+        height: 20px;
+        left: 10px;
+	}
+	td > input.time:checked ~img{
+		display: inline-block;
+	}
+
+	.ticker{
+		display: none;
+	}
+</style>
+</head>
+
+<body>
+<table class="table table-bordered table-hover col-sm-12" width="100%">
+	<tr>
+		<td colspan=4><h4>训练时间</h2></td>
+
+	</tr>
+
+	<tr>
+		<td rowspan=2>日期</td>
+		<td colspan=3>时间</td>
+
+
+	</tr>
+	<tr>
+		<td>上午</td>
+		<td>下午</td>
+		<td>晚上</td>
+	</tr>
+	<tr>
+		<td><span class="day">时间</span></td>
+		<td style="width: 25%"><input type="time">-<input type="time"></td>
+		<td style="width: 25%"><input type="time">-<input type="time"></td>
+		<td style="width: 25%"><input type="time">-<input type="time"></td>
+	</tr>
+	<tr>
+		<td><span class="day">时间</span></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+	</tr>
+	<tr>
+		<td><span class="day">时间</span></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+	</tr>
+	<tr>
+		<td><span class="day">时间</span></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+	</tr>
+	<tr>
+		<td><span class="day">时间</span></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+	</tr>
+	<tr>
+		<td><span class="day">时间</span></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+	</tr>
+	<tr>
+		<td><span class="day">时间</span></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+	</tr>
+	<tr>
+		<td><span class="day">时间</span></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+	</tr>
+	<tr>
+		<td><span class="day">时间</span></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+		<td><input type="time">-<input type="time"></td>
+	</tr>
+</table>
+<div style="text-align: center;margin-bottom: 20px">
+<button class="btn btn-info " id="add">增加</button>
+	
+<button class="btn btn-info" id="del">删除</button>
+</div>
+<button class="btn btn-primary center-block">提交</button>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>
+function builddate(){
+	$(".time").each(function(){
+		var rank = $(".time").index($(this));
+	$(this).attr("id",function(){
+			value="time"+rank;
+			return value;
+	});
+	$(this).nextAll("label").attr("for",function(){
+			value="time"+rank;
+			return value;
+	});
+	});
+		var time = new Date();
+		var i=0;
+		var j=0;
+	$(".day").text(function(index,value){
+		time.setDate(time.getDate()+1);
+		var day=time.getDate(),
+		mon=time.getMonth()+1,
+		year=time.getFullYear();
+		today=year+"-"+mon+"-"+day;
+		value=today;
+         return value;
+	})
+	$(".table tr").each(function(){
+		$(this).find("td input").each(function(){
+			$(this).attr("name","time["+j+"][]")
+		})
+	})
+}
+builddate();
+	var clonenode=$("tr:eq(-1)").clone(true);
+	$("#add").click(function(){
+	    var subclone = clonenode.clone(true);
+		$("table tr:last").after(subclone);
+		builddate();
+	})
+	$("#del").click(function(){
+		$("table tr:last").remove();
+	})
+
+</script>
+</body>
+</html>

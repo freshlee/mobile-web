@@ -7,6 +7,42 @@
  <script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script> 
 <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <style>
+html {
+font-size: 62.5%
+}
+@media only screen and (min-width: 360px) {
+html {
+font-size:75%!important
+}
+}
+@media only screen and (min-width: 481px) {
+html {
+font-size:94%!important
+}
+}
+
+@media only screen and (min-width: 561px) {
+html {
+font-size:109%!important
+}
+}
+
+@media only screen and (min-width: 641px) {
+html {
+font-size:125%!important
+}
+}
+@media only screen and (min-width: 768px) {
+html {
+font-size:176%!important
+}
+}
+@media only screen and (min-width: 1280px) {
+html {
+font-size:285%!important
+}
+
+}
 *{
 	margin:0;
 	padding: 0;
@@ -22,36 +58,82 @@
 	}
 	.content{
 		height: 150px;
+		padding-top: 50px;
 		text-align: left;
 	}
 	.container{
-		border: 1px solid black;
+		margin-bottom: 30px;
 	}
-	.container  img {
+	.container  img,.container .img {
+		width: 7.6rem;
 		height: 100px;
 	}
+	.container .img {
+		padding: 6px;
+		margin:0 0.2rem;
+        box-sizing: content-box;
+		border: 1px solid black;
+		float: left;
+	}
+	.subscript{
+		position: absolute;
+		opacity: 0.5;
+		top: 6px;
+		right: 6px;
+		height: 20px;
+		width: 20px;
+		background: white;
+		border-radius: 20px;
+	}
+	.subscript:hover{
+		cursor: pointer;
+	}
+	label[for=licence]:hover{
+		cursor: pointer;
+	}
+
 </style>
 <title>无标题文档</title>
 </head>
 <body>
-	<div class="header"><strong>上传驾照{{test}}</strong></div>
+	<div class="header"><strong>上传驾照</strong></div>
 	<div class="content" style="text-align: center;">
-		<input type="date" />,你已通过所有考试获得驾照，请上传您的驾照图片
-		<div><label for="licence">驾照</label><input type="file"  id="licence" style="display: none" /></div>
+		<input type="date" />,你已通过所有考试获得驾照，请上传您的驾照图片 
+		<br />
+        <br />
+		<div><input type="file"  id="licence" style="display: none" /></div>
 	</div>
-	<div class="container"><img ng-repeat="x in thumb" src={{x.imgSrc}}></div></div>
-	<button class="btn btn-info center-block" >上传</button>
+	<div class="container">
+	<div class="img" ng-repeat="x in thumb" repeat-done="afterall()" style="position: relative;"><img  src={{x.imgSrc}}><div class="subscript" style="text-align: center;font-size: 1.3em;line-height: 1.3em;">&times;</div>
+	</div>
+	<label for="licence">
+		<div class="img" style="background-image:url('./u=1706912326,1395794420&fm=23&gp=0.jpg');background-size: 100% ;background-repeat: no-repeat;background-position: 0 20px"></div>
+	</div>
+	</label>
+	</div>
+	<form action="" >
+    <input type="hidden" ng-repeat="x in thumb"  repeat-done="afterall()" name="data[]" value={{x.value}} />
+	<button class="btn btn-info center-block" style="width: 100%;position:fixed;bottom: 0" >上传</button>
+	</form>
 </body>
 <script>
 	var mymodel=angular.module("preview",[]);
-	mymodel.directive("imgPreview",function(){
-		return{
-            template:"<li></li>"
-		}
-	})
+    mymodel.directive('repeatDone', function() {
+    return {
+        link: function(scope, element, attrs) {
+            if (scope.$last) {                   // 这个判断意味着最后一个 OK
+                scope.$eval(attrs.repeatDone)    // 执行绑定的表达式
+            }
+        }
+    }
+})
+	
+
+
 	mymodel.controller("viewCtrl",function($scope){
-    $scope.thumb=new Array
+    $scope.thumb=new Array;
 	function addview(){
+    var myvalue=document.getElementById('licence').value;
 	$scope.file=document.getElementById('licence').files;
     $scope.test="test";
     $scope.fileName = $scope.file[0].name; 
@@ -70,15 +152,37 @@
      $scope.reader.readAsDataURL($scope.file[0]); //FileReader的方法，把图片转成base64 
      $scope.reader.onload = function(ev) { 
       $scope.$apply(function(){ 
-       $scope.thumb.push({ 
+       $scope.thumb.push({
+        value : myvalue,
         imgSrc : ev.target.result  //接收base64，scope.thumb.imgSrc为图片。 
        });
       }); 
      }; 
     }else{ 
      alert('上传图片不能为空!'); 
-    } 
-		}
+    }
+}
+    $scope.afterall=function(){
+    	function index(current, obj){
+     for (var i = 0, length = obj.length; i<length; i++) {
+     if (obj[i] == current) {
+     return i;
+     }
+     }
+     }
+	function delview(THIS){
+	   var sum=document.getElementsByClassName("subscript");
+       var pos= index(THIS,sum);
+       $scope.$apply(function(){
+          $scope.thumb.splice(pos,1);
+       })
+	}
+	for(var key in document.getElementsByClassName("subscript")){
+		document.getElementsByClassName("subscript")[key].onclick=function(){
+		delview(this);
+	}
+	}
+    }
 
     document.getElementById('licence').onchange=function(){
       addview();

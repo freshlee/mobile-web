@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="viewport" content="width=device-width,height=device-height, user-scalable=no,initial-scale=1, minimum-scale=1, maximum-scale=1,target-densitydpi=device-dpi ">  
+<link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" />
+ <script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script> 
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<style>
+	.header{
+		height: 40px;
+		background: #1E90FF;
+		text-align: center;
+	}
+	.header strong{
+		line-height: 40px;
+		font-size: 1.1em;
+	}
+	.container ul li{
+        list-style: none;
+        padding: 10px 0; 
+	}
+	.container ul li input{
+		border: none;
+	}
+</style>
+</head>
+<body ng-app="myApp" ng-controller="Ctrl">
+	<div class="header"><strong>建议</strong></div>
+	<div class="container" ng-app="">
+	<ul>
+		<li ng-repeat="x in list" >建议{{$index+1}}<input type="text" ng-model="class"/><button class="close" style="display: inline-block;" ng-click="dellist(x.index)"> &times;</button></li> 
+
+	</div>
+	<button type="button" class="btn center-block" ng-click="addlist()">增加一条</button>
+
+<script>
+	var app=angular.module('myApp',[]);
+	//index服务;
+
+    app.service("searchIndex",function(){
+    	this.myindex=function(x,search){
+             for(i=0;i<=x.length;i++){
+                  if(x[i].index===search.index){return i;alert("ssss");}
+             }
+    	}
+    })
+	app.directive("checkinput",function(){
+        
+	})
+	app.controller('Ctrl',function($scope,searchIndex){
+				  $scope.list=[];
+				  var cal=0;
+         $scope.addlist=function(){
+        
+         		if($scope.list.length<8){                
+                $scope.list.push({index:cal});cal++;console.log($scope.list[2])}
+                else{alert("输入不能超过8条");}
+         }
+         $scope.dellist=function($index){
+
+         	var pos=searchIndex.myindex($scope.list,{index:$index});
+         	$scope.list.splice(pos,1);
+         	console.log(pos);
+         	console.log({index:$index});
+         }
+	})
+</script>
+</body>
+</html>
